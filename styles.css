@@ -72,6 +72,21 @@
     color: green;
 }
 
+#shopBut {
+    width: 100px;
+    height: 100px;
+}
+
+#fishingLvlTwo {
+    width: 200px;
+    height: 200px;
+}
+
+#fishingLvlThree {
+    width: 200px;
+    height: 200px;
+}
+
 /*
 #lake {
   display: inline-block;     /* Заменили inline на inline-block, чтобы ширина (800px) и высота (350px) работали корректно 
