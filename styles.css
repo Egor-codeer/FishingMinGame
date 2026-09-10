@@ -1,0 +1,101 @@
+#throw {
+    /*transform: rotate(30deg);
+    display: inline-block;*/
+        position: absolute;
+    font-size: 50px;
+    margin-left: 1000px;
+    display: inline;
+    top: 500px;
+    right: 100px;
+}
+
+#Fishing {
+    position: absolute;
+    width: 300px;
+    height: 350px;
+    margin-bottom: 300px;
+    margin-left: 200px;
+    margin-top: 50px;
+    mix-blend-mode: multiply; 
+    transition: transform 0.4s ease-out; 
+}
+
+#proc {
+    position: absolute;
+    display: flex;
+    font-size: 60px;
+    top: 350px;
+    display: inline;
+}
+
+#lake {
+    width: 800px;
+    height: 350px;
+    border-radius: 15px;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+
+#imageDiv {
+    width: 20%;
+    height: 20%;
+    object-fit: contain;
+    top: 70px; 
+    left: 100px;
+    position: absolute;
+    mix-blend-mode: multiply; 
+    transition: transform 0.4s ease-out; 
+}
+
+#containerFish {
+    font-family: impact;
+    font-size: 40px;
+    top: 100px;
+    left: 50px;
+    position: absolute;
+}
+
+#FishImg img {
+    border-radius: 10px;
+    width: 250px;
+    height: 150px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#money {
+    font-size: 70px;
+    color: green;
+}
+
+/*
+#lake {
+  display: inline-block;     /* Заменили inline на inline-block, чтобы ширина (800px) и высота (350px) работали корректно 
+  width: 800px;
+  height: 350px;
+  border-radius: 15px;
+  position: relative;        /* Главная точка отсчета для картинки внутри 
+  overflow: hidden;          /* Скругляет углы, если фоновая картинка вылезает за border-radius 
+}
+
+#imageDiv img {
+  position: absolute;        /* Ставим точку с запятой! */
+  
+  /* Управляем положением картинки внутри #lake
+  top: 50px;                 /* Вместо огромного margin-top. Настройте отступ сверху под себя 
+  left: 50px;                /* Отступ слева 
+  
+  /* Размеры картинки (сделали чуть крупнее, чтобы её было видно сквозь маску) 
+  width: 20%;                /* 20% от ширины контейнера
+  height: auto;              /* Авто-высота сохранит правильные пропорции изображения
+  object-fit: contain;
+  
+  /* Исправленный синтаксис маски (добавлены двоеточия и точки с запятой) 
+  mask-image: radial-gradient(circle, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle, black 30%, transparent 70%);
+}
+*/
