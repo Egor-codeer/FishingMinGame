@@ -1,5 +1,7 @@
 const wait = (seconds) => new Promise(resolve => setTimeout(resolve, seconds * 1000));
 
+let silaThrow = 5;
+
 // =========================================================================
 // СОХРАНЕНИЕ И ЗАГРУЗКА ДАННЫХ
 // =========================================================================
@@ -10,6 +12,9 @@ if (document.querySelector('#money')) {
 
 // Загружаем уровень удочки (если нет в памяти, ставим 1)
 let rodLvl = Number(localStorage.getItem('fishing_rod_lvl')) || 1;
+
+let savedValue = localStorage.getItem('silaThrow');
+let numberValue = Number(savedValue);
 
 // Делаем переменные количества кликов глобальными, чтобы магазин мог их менять
 let minClickFish = rodLvl === 2 ? 15 : 15;
@@ -62,13 +67,14 @@ function throwClick() {
     if (trueFish === true || trueFish === 'process') return;
     if (!fishing || !thr || !proc || !imag) return; // Если элементов нет на странице — выходим
 
+    let savedValue = localStorage.getItem('silaThrow');
     imag.style.opacity = 0;
     let minDeg = 5;
     let maxDeg = 100;
     let randomDeg = Math.floor(Math.random() * (maxDeg - minDeg + 1)) + minDeg;
     fishing.style.transform = `rotate(${randomDeg}deg)`;
 
-    plusNum = plusNum + 5;
+    plusNum = plusNum + numberValue;
 
     if (plusNum > 100) {
         thr.textContent = 'Удочка закинута! ЖМИ НА ПОПЛОВОК!';
@@ -128,7 +134,7 @@ async function clickForFish() {
 
         plusNum = 0;
         if (proc) proc.textContent = 0 + '%';
-        if (thr) thr.textContent = 'Бросить удочку';
+        if (thr) thr.textContent = 'Забросить удочку';
         document.body.style.backgroundColor = 'gray';
         if (fishing) fishing.style.backgroundColor = 'gray';
 
@@ -226,7 +232,10 @@ function LvlTwoFish() {
         rodLvl = 2;
         minClickFish = 15;
         maxClickFish = 40;
+        numberValue = numberValue + 3
         
+        localStorage.setItem('silaThrow', String(silaThrow));
+
         if (fishing) {
             fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNQnl_FwnIjoCWFWXPPFczopliuE__e3Uh7EDiJWi2AA&s=10';
         }
@@ -262,7 +271,9 @@ function LvlThreeFish() {
         rodLvl = 3;
         minClickFish = 10;
         maxClickFish = 30;
-        
+        savedValue = savedValue + 5;
+    }
+
         if (fishing) {
             fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDKrRWiFNLtQb59YqZ1uWQAX4Cg2hVuIQ-viUXlo8L5w&s=10'; // Добавьте ссылку при необходимости
         }
@@ -280,12 +291,12 @@ function LvlThreeFish() {
         localStorage.setItem('fishing_rod_lvl', rodLvl);
         
         alert('Удочка 3-го уровня успешно куплена! Клик по поплавку стал гоооорааааздоооо легче. 🎣');
-    } else if (rodLvl >= 3) {
+    } if (rodLvl >= 3) {
         alert('Эта удочка уже куплена!');
     } else {
         alert('Недостаточно монет! Требуется 3000 🪙');
     }
-}
+
 
 // =========================================================================
 // ИНИЦИАЛИЗАЦИЯ И НАЗНАЧЕНИЕ КЛИКОВ (ОБЪЕДИНЕНО)
