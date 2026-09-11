@@ -122,7 +122,7 @@ async function clickForFish() {
         return;
     }
 
-    ClickFish--;
+    numberValue--;
 
     if (ClickFish <= 0) {
         // ЗАЩИТА: Отсекаем повторные случайные срабатывания (даблклики)
