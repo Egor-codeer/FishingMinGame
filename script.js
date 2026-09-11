@@ -133,15 +133,15 @@ async function clickForFish() {
         if (fishing) fishing.style.backgroundColor = 'gray';
 
         const fishes = [
-          { name: 'корюшка', weight: 220, price: 25},
-          { name: 'окунь', weight:  200, price: 35},
-          { name: 'плотва', weight: 185, price: 50},
-          { name: 'лещ', weight: 160, price: 75 },
-          { name: 'щука', weight: 140, price: 125 },
-          { name: 'лосось', weight: 100, price: 250 },
-          { name: 'акула', weight: 10, price: 500 },
-          { name: 'кит', weight: 5, price: 1250},
-          { name: 'золотая рыбка', weight: 2, price: 2500}
+          { name: 'корюшка', weight: 220, price: 50},
+          { name: 'окунь', weight:  200, price: 65},
+          { name: 'плотва', weight: 185, price: 100},
+          { name: 'лещ', weight: 160, price: 150},
+          { name: 'щука', weight: 140, price: 250},
+          { name: 'лосось', weight: 100, price: 500},
+          { name: 'акула', weight: 10, price: 1000},
+          { name: 'кит', weight: 5, price: 2500},
+          { name: 'золотая рыбка', weight: 2, price: 5000}
         ];
 
         const totalWeight = fishes.reduce((sum, fish) => sum + fish.weight, 0);
@@ -213,14 +213,17 @@ if (imag) {
 }
 
 // МАГАЗИН (УДОЧКА LVL 2)
+ let moneyCount = document.querySelector('#money');
 
+// =========================================================================
+// МАГАЗИН: УДОЧКА LVL 2
+// =========================================================================
 function LvlTwoFish() {
-    let moneyCount = document.querySelector('#money');
     let buyBtn = document.querySelector('#fishingLvlTwo');
 
-    if (money >= 1000 && rodLvl < 2) {
+    if (money >= 1000 && rodLvl === 1) {
         money = money - 1000;
-        rodLvl = 2; // Повышаем уровень в системе
+        rodLvl = 2;
         minClickFish = 15;
         maxClickFish = 40;
         
@@ -242,67 +245,68 @@ function LvlTwoFish() {
         
         alert('Удочка 2-го уровня успешно куплена! Клик по поплавку стал легче. 🎣');
     } else if (rodLvl >= 2) {
-        alert('Эта удочка уже куплена!');
+        alert('Эта удочка или более улучшенная уже куплена!');
     } else {
         alert('Недостаточно монет! Требуется 1000 🪙');
     }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    let buyBtn = document.querySelector('#fishingLvlTwo'); 
-    
-    if (buyBtn) {
-        if (rodLvl >= 2) {
-            buyBtn.textContent = 'Куплено';
-            buyBtn.style.backgroundColor = 'green';
-        }
-        buyBtn.onclick = LvlTwoFish;
-    }
-});
-
-//МАГАЗИН УДОЧКА LVL 3
-
+// =========================================================================
+// МАГАЗИН: УДОЧКА LVL 3
+// =========================================================================
 function LvlThreeFish() {
-    let buyBtnTwo = document.querySelector('#fishingLvlTwo');
+    let buyBtnThree = document.querySelector('#fishingLvlThree'); // Исправлен ID кнопки
 
-    if (money >= 1000 && rodLvl < 2) {
-        money = money - 4000;
+    if (money >= 3000 && rodLvl < 3) {
+        money = money - 3000;
         rodLvl = 3;
-        minClickFish = 15;
-        maxClickFish = 40;
+        minClickFish = 10;
+        maxClickFish = 30;
         
         if (fishing) {
-            fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQggGoVOR_qpCNyYnZnqQEbgOSiSoMnZt59IcFD7VDTQQ&s';
+            fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDKrRWiFNLtQb59YqZ1uWQAX4Cg2hVuIQ-viUXlo8L5w&s=10'; // Добавьте ссылку при необходимости
         }
 
         if (moneyCount) {
             moneyCount.textContent = money;
         }
 
-        if (buyBtnTwo) {
-            buyBtnTwo.textContent = 'Куплено';
-            buyBtnTwo.style.backgroundColor = 'green';
+        if (buyBtnThree) {
+            buyBtnThree.textContent = 'Куплено';
+            buyBtnThree.style.backgroundColor = 'green';
         }
 
         localStorage.setItem('fishing_money', money);
         localStorage.setItem('fishing_rod_lvl', rodLvl);
         
         alert('Удочка 3-го уровня успешно куплена! Клик по поплавку стал гоооорааааздоооо легче. 🎣');
-    } else if (rodLvl >= 2) {
+    } else if (rodLvl >= 3) {
         alert('Эта удочка уже куплена!');
     } else {
-        alert('Недостаточно монет! Требуется 4000 🪙');
+        alert('Недостаточно монет! Требуется 3000 🪙');
     }
 }
 
+// =========================================================================
+// ИНИЦИАЛИЗАЦИЯ И НАЗНАЧЕНИЕ КЛИКОВ (ОБЪЕДИНЕНО)
+// =========================================================================
 window.addEventListener('DOMContentLoaded', () => {
-    let buyBtnTwo = document.querySelector('#fishingLvlTwo'); 
+    let buyBtn2 = document.querySelector('#fishingLvlTwo'); 
+    let buyBtn3 = document.querySelector('#fishingLvlThree'); 
     
-    if (buyBtn) {
-        if (rodLvl >= 3) {
-            buyBtnTwo.textContent = 'Куплено';
-            buyBtnTwo.style.backgroundColor = 'green';
+    if (buyBtn2) {
+        if (rodLvl >= 2) {
+            buyBtn2.textContent = 'Куплено';
+            buyBtn2.style.backgroundColor = 'green';
         }
-        buyBtnTwo.onclick = LvlThreeFish;
+        buyBtn2.onclick = LvlTwoFish;
+    }
+
+    if (buyBtn3) {
+        if (rodLvl >= 3) {
+            buyBtn3.textContent = 'Куплено';
+            buyBtn3.style.backgroundColor = 'green';
+        }
+        buyBtn3.onclick = LvlThreeFish;
     }
 });

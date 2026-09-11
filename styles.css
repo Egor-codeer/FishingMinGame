@@ -1,18 +1,18 @@
 #throw {
     /*transform: rotate(30deg);
     display: inline-block;*/
-        position: absolute;
-    font-size: 50px;
+    position: absolute;
+    font-size: 500%;
     margin-left: 1000px;
     display: inline;
-    top: 500px;
+    top: 600px;
     right: 100px;
 }
 
 #Fishing {
     position: absolute;
-    width: 300px;
-    height: 350px;
+    width: 30%;
+    height: 50%;
     margin-bottom: 300px;
     margin-left: 200px;
     margin-top: 50px;
@@ -23,14 +23,14 @@
 #proc {
     position: absolute;
     display: flex;
-    font-size: 60px;
-    top: 350px;
+    font-size: 500%;
+    top: 440px;
     display: inline;
 }
 
 #lake {
-    width: 800px;
-    height: 350px;
+    width: 45%;
+    height: 80%;
     border-radius: 15px;
     display: inline-block;
     position: relative;
@@ -58,8 +58,8 @@
 
 #FishImg img {
     border-radius: 10px;
-    width: 250px;
-    height: 150px;
+    width: 15%;
+    height: 20%;
     position: absolute;
     top: 20px;
     left: 20px;
@@ -68,23 +68,23 @@
 }
 
 #money {
-    font-size: 70px;
+    font-size: 500%;
     color: green;
 }
 
 #shopBut {
-    width: 100px;
-    height: 100px;
+    width: 10%;
+    height: 10%;
 }
 
 #fishingLvlTwo {
-    width: 200px;
-    height: 200px;
+    width: 10vmin;
+    height: 30vmin;
 }
 
 #fishingLvlThree {
-    width: 200px;
-    height: 200px;
+    width: 30vmin;
+    height: 30vmin;
 }
 
 /*
