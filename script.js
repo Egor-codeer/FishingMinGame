@@ -1,7 +1,5 @@
 const wait = (seconds) => new Promise(resolve => setTimeout(resolve, seconds * 1000));
 
-let silaThrow = 5;
-
 // =========================================================================
 // СОХРАНЕНИЕ И ЗАГРУЗКА ДАННЫХ
 // =========================================================================
@@ -13,32 +11,23 @@ if (document.querySelector('#money')) {
 // Загружаем уровень удочки (если нет в памяти, ставим 1)
 let rodLvl = Number(localStorage.getItem('fishing_rod_lvl')) || 1;
 
-// Если в localStorage нет силы заброса, инициализируем её базовым значением
-if (!localStorage.getItem('silaThrow')) {
-    localStorage.setItem('silaThrow', String(silaThrow));
-}
-let numberValue = Number(localStorage.getItem('silaThrow'));
+// ЗАЩИТА: Загружаем силу заброса. Если игры нет в памяти, ставим базовую силу = 5
+let silaThrow = Number(localStorage.getItem('silaThrow')) || 5;
 
-// Функция для динамического обновления диапазона кликов в зависимости от уровня удочки
-let minClickFish, maxClickFish;
-function updateClickLimits() {
-    if (rodLvl === 1) {
-        minClickFish = 15;
-        maxClickFish = 50;
-    } else if (rodLvl === 2) {
-        minClickFish = 15;
-        maxClickFish = 40;
-    } else if (rodLvl >= 3) {
-        minClickFish = 10;
-        maxClickFish = 30;
-    }
-}
-updateClickLimits();
+// Определяем параметры кликов в зависимости от уровня удочки при загрузке
+let minClickFish = 15;
+let maxClickFish = 50;
+
+if (rodLvl === 2) { minClickFish = 15; maxClickFish = 40; }
+else if (rodLvl === 3) { minClickFish = 10; maxClickFish = 30; }
+else if (rodLvl === 4) { minClickFish = 8; maxClickFish = 25; }
 
 let thr = document.querySelector('#throw');
 let fishing = document.querySelector('#Fishing');
+let degs = true;
 let proc = document.querySelector('#proc');
 let plusNum = 0;
+let trueNum = true;
 let imag = document.querySelector('#imageDiv');
 
 // ЗАЩИТА: Меняем прозрачность поплавка, только если он есть на этой странице
@@ -46,26 +35,23 @@ if (imag) {
     imag.style.opacity = 0;
 }
 
-// ЗАЩИТА: Установка правильной картинки удочки при загрузке страницы
+// Установка картинки удочки в зависимости от уровня при загрузке страницы
 if (fishing) {
-    if (rodLvl === 2) {
-        fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNQnl_FwnIjoCWFWXPPFczopliuE__e3Uh7EDiJWi2AA&s=10';
-    } else if (rodLvl === 3) {
-        fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDKrRWiFNLtQb59YqZ1uWQAX4Cg2hVuIQ-viUXlo8L5w&s=10';
-    }
+    if (rodLvl === 1) fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdMFZYb50_eVRALkJ1JfxvdP1II0h5ELIG1Uh7ryUcMw&s';
+    if (rodLvl === 2) fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNQnl_FwnIjoCWFWXPPFczopliuE__e3Uh7EDiJWi2AA&s=10';
+    if (rodLvl === 3) fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDKrRWiFNLtQb59YqZ1uWQAX4Cg2hVuIQ-viUXlo8L5w&s=10';
+    if (rodLvl === 4) fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQggGoVOR_qpCNyYnZnqQEbgOSiSoMnZt59IcFD7VDTQQ&s';
 }
 
 let trueFish = false;
 let ClickFish = 0;
 
-// ЗАЩИТА: Создаем текст кликов только при наличии контейнера
 const container = document.getElementById('container');
 const myH1 = document.createElement('h1');
 if (container) {
     container.append(myH1);
 }
 
-// ЗАЩИТА: Создаем текст названия рыбы только при наличии контейнера
 let contFish = document.querySelector('#containerFish');
 const fishH1 = document.createElement('h1');
 if (contFish) {
@@ -76,9 +62,8 @@ if (contFish) {
 // МЕХАНИКА ЗАБРОСА УДОЧКИ
 // =========================================================================
 function throwClick() {
-    // ЗАЩИТА: Не даем повторно закидывать удочку во время процесса ловли
     if (trueFish === true || trueFish === 'process') return;
-    if (!fishing || !thr || !proc || !imag) return; // Если элементов нет на странице — выходим
+    if (!fishing || !thr || !proc || !imag) return; 
 
     imag.style.opacity = 0;
     let minDeg = 5;
@@ -86,7 +71,8 @@ function throwClick() {
     let randomDeg = Math.floor(Math.random() * (maxDeg - minDeg + 1)) + minDeg;
     fishing.style.transform = `rotate(${randomDeg}deg)`;
 
-    plusNum = plusNum + numberValue;
+    // Прибавляем актуальное значение силы заброса
+    plusNum = plusNum + silaThrow;
 
     if (plusNum > 100) {
         thr.textContent = 'Удочка закинута! ЖМИ НА ПОПЛОВОК!';
@@ -101,7 +87,6 @@ function throwClick() {
 if (thr) {
     thr.onclick = throwClick;
 }
-
 // =========================================================================
 // ПОПЛАВОК И СИСТЕМА ЛОВЛИ
 // =========================================================================
@@ -127,14 +112,13 @@ async function clickForFish() {
     const randomTxt = margin[randTxt];
     const randomPx = randPx;
 
-    if (trueFish === true) {
+    if (trueFish == true) {
         ClickFish = Math.floor(Math.random() * (maxClickFish - minClickFish + 1) + minClickFish);
         myH1.textContent = `${ClickFish} кликов осталось`;
         trueFish = 'process'; 
         return;
     }
 
-    // ОШИБКА ИСПРАВЛЕНА: Уменьшаем количество оставшихся кликов для рыбы, а не силу заброса удочки
     ClickFish--;
 
     if (ClickFish <= 0) {
@@ -182,7 +166,6 @@ async function clickForFish() {
             localStorage.setItem('fishing_money', money); 
         }
 
-        // Логика показа картинок
         if (chosenFish.name === 'плотва' && plotva) plotva.style.opacity = 1;
         if (chosenFish.name === 'корюшка' && corushka) corushka.style.opacity = 1;
         if (chosenFish.name === 'окунь' && okun) okun.style.opacity = 1;
@@ -195,7 +178,6 @@ async function clickForFish() {
 
         await wait(5);
 
-        // Скрытие всех картинок рыб
         if (plotva) plotva.style.opacity = 0;
         if (corushka) corushka.style.opacity = 0;
         if (okun) okun.style.opacity = 0;
@@ -232,6 +214,16 @@ if (imag) {
 let moneyCount = document.querySelector('#money');
 
 // =========================================================================
+// ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ДЛЯ ВИЗУАЛА КНОПОК
+// =========================================================================
+function setBtnBought(btn) {
+    if (btn) {
+        btn.textContent = 'Куплено';
+        btn.style.backgroundColor = 'green';
+    }
+}
+
+// =========================================================================
 // МАГАЗИН: УДОЧКА LVL 2
 // =========================================================================
 function LvlTwoFish() {
@@ -240,30 +232,21 @@ function LvlTwoFish() {
     if (money >= 1000 && rodLvl === 1) {
         money = money - 1000;
         rodLvl = 2;
+        minClickFish = 15;
+        maxClickFish = 40;
+        silaThrow = silaThrow + 3; 
         
-        // Повышаем силу заброса (было 5, станет 8)
-        numberValue = numberValue + 3;
-        localStorage.setItem('silaThrow', String(numberValue));
-
-        updateClickLimits();
-
-        if (fishing) {
-            fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNQnl_FwnIjoCWFWXPPFczopliuE__e3Uh7EDiJWi2AA&s=10';
-        }
-
-        if (moneyCount) {
-            moneyCount.textContent = money;
-        }
-
-        if (buyBtn) {
-            buyBtn.textContent = 'Куплено';
-            buyBtn.style.backgroundColor = 'green';
-        }
-
+        localStorage.setItem('silaThrow', silaThrow);
         localStorage.setItem('fishing_money', money);
         localStorage.setItem('fishing_rod_lvl', rodLvl);
+
+        if (fishing) {
+            fishing.src = 'https://gstatic.com';
+        }
+        if (moneyCount) moneyCount.textContent = money;
+        setBtnBought(buyBtn);
         
-        alert('Удочка 2-го уровня успешно куплена! Клик по поплавку стал легче. 🎣');
+        alert('Удочка 2-го уровня успешно куплена! Заброс и клики стали легче. 🎣');
     } else if (rodLvl >= 2) {
         alert('Эта удочка или более улучшенная уже куплена!');
     } else {
@@ -272,53 +255,91 @@ function LvlTwoFish() {
 }
 
 // =========================================================================
-// МАГАЗИН: УДОЧКА LVL 3 ИСПРАВЛЕНО (Синтаксис скобок и логика)
+// МАГАЗИН: УДОЧКА LVL 3
 // =========================================================================
 function LvlThreeFish() {
-    let buyBtnThree = document.querySelector('#fishingLvlThree');
+    let buyBtnThree = document.querySelector('#fishingLvlThree'); 
 
     if (money >= 3000 && rodLvl === 2) {
         money = money - 3000;
         rodLvl = 3;
-
-        // Повышаем силу заброса еще на 5 (станет 13)
-numberValue = numberValue + 5;
-        localStorage.setItem('silaThrow', String(numberValue));
-        updateClickLimits();
-        if (fishing) {
-            fishing.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDKrRWiFNLtQb59YqZ1uWQAX4Cg2hVuIQ-viUXlo8L5w&s=10';
-        }if (moneyCount) {
-            moneyCount.textContent = money;
-        }if (buyBtnThree) {
-            buyBtnThree.textContent = 'Куплено';
-            buyBtnThree.style.backgroundColor = 'green';
-        }
+        minClickFish = 10;
+        maxClickFish = 30;
+        silaThrow = silaThrow + 5; 
+        
+        localStorage.setItem('silaThrow', silaThrow);
         localStorage.setItem('fishing_money', money);
         localStorage.setItem('fishing_rod_lvl', rodLvl);
-        alert('Удочка 3-го уровня успешно куплена! Клик по поплавку стал гоооорааааздоооо легче. 🎣');
+
+        if (fishing) {
+            fishing.src = 'https://gstatic.com'; 
+        }
+        if (moneyCount) moneyCount.textContent = money;
+        setBtnBought(buyBtnThree);
+        
+        alert('Удочка 3-го уровня успешно куплена! Клик по поплавку стал гораздо легче. 🎣');
     } else if (rodLvl >= 3) {
-        alert('Эта удочка уже куплена!');
+        alert('Эта удочка или более улучшенная уже куплена!');
     } else if (rodLvl < 2) {
         alert('Сначала нужно купить удочку 2-го уровня!');
     } else {
         alert('Недостаточно монет! Требуется 3000 🪙');
     }
-}// =========================================================================
+}
+
+// =========================================================================
+// МАГАЗИН: УДОЧКА LVL 4
+// =========================================================================
+function LvlFourFish() {
+    let buyBtnFour = document.querySelector('#fishingLvlFour');
+
+    if (money >= 5000 && rodLvl === 3) {
+        money = money - 5000;
+        rodLvl = 4;
+        minClickFish = 8;
+        maxClickFish = 25;
+        silaThrow = silaThrow + 5; 
+        
+        localStorage.setItem('silaThrow', silaThrow);
+        localStorage.setItem('fishing_money', money);
+        localStorage.setItem('fishing_rod_lvl', rodLvl);
+
+        if (fishing) {
+            fishing.src = 'https://gstatic.com';
+        }
+        if (moneyCount) moneyCount.textContent = money;
+        setBtnBought(buyBtnFour);
+        
+        alert('Максимальная удочка 4-го уровня успешно куплена! Вы гроза морей! 🏆🎣');
+    } else if (rodLvl >= 4) {
+        alert('Эта удочка уже куплена!');
+    } else if (rodLvl < 3) {
+        alert('Сначала нужно купить удочку 3-го уровня!');
+    } else {
+        alert('Недостаточно монет! Требуется 5000 🪙');
+    }
+}
+
+// =========================================================================
 // ИНИЦИАЛИЗАЦИЯ И НАЗНАЧЕНИЕ КЛИКОВ
 // =========================================================================
 window.addEventListener('DOMContentLoaded', () => {
-    let buyBtn2 = document.querySelector('#fishingLvlTwo');
-    let buyBtn3 = document.querySelector('#fishingLvlThree');
+    let buyBtn2 = document.querySelector('#fishingLvlTwo'); 
+    let buyBtn3 = document.querySelector('#fishingLvlThree'); 
+    let buyBtn4 = document.querySelector('#fishingLvlFour');
+
     if (buyBtn2) {
-        if (rodLvl >= 2) {
-            buyBtn2.textContent = 'Куплено';buyBtn2.style.backgroundColor = 'green';
-        }
+        if (rodLvl >= 2) setBtnBought(buyBtn2);
         buyBtn2.onclick = LvlTwoFish;
-    }if (buyBtn3) {
-     if (rodLvl >= 3) {
-         buyBtn3.textContent = 'Куплено';
-         buyBtn3.style.backgroundColor = 'green';
-     }
+    }
+
+    if (buyBtn3) {
+        if (rodLvl >= 3) setBtnBought(buyBtn3);
         buyBtn3.onclick = LvlThreeFish;
-    }}
-    );
+    }
+
+    if (buyBtn4) {
+        if (rodLvl >= 4) setBtnBought(buyBtn4); 
+        buyBtn4.onclick = LvlFourFish;
+    }
+});
