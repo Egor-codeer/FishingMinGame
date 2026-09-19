@@ -315,7 +315,7 @@ function LvlThreeFish() {
 function LvlFourFish() {
     let buyBtnFour = document.querySelector('#fishingLvlFour');
 
-    if (money >= 7000 && rodLvl === 3) {
+    if (money >= 5000 && rodLvl === 3) {
         money = money - 5000;
         rodLvl = 4;
         minClickFish = 8;
