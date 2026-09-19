@@ -21,6 +21,7 @@ let maxClickFish = 50;
 if (rodLvl === 2) { minClickFish = 15; maxClickFish = 40; }
 else if (rodLvl === 3) { minClickFish = 10; maxClickFish = 30; }
 else if (rodLvl === 4) { minClickFish = 8; maxClickFish = 25; }
+else if (rodLvl === 5) { minClickFish = 5; maxClickFish = 20; }
 
 let thr = document.querySelector('#throw');
 let fishing = document.querySelector('#Fishing');
@@ -103,10 +104,12 @@ async function clickForFish() {
     let corushka = document.querySelector('#Corushka');
     let okun = document.querySelector('#okun');
     let lesh = document.querySelector('#lesh');
+    let osminog = document.querySelector('#osminog');
     let shuka = document.querySelector('#shuka');
     let losoc = document.querySelector('#losoc');
     let shark = document.querySelector('#shark');
     let kit = document.querySelector('#kit');
+    let someCorushk = document.querySelector('#SomeCor');
     let goldFish = document.querySelector('#goldFish');
     let moneyCount = document.querySelector('#money');
 
@@ -135,7 +138,7 @@ async function clickForFish() {
         document.body.style.backgroundColor = 'gray';
         if (fishing) fishing.style.backgroundColor = 'gray';
 
-        const fishes = [
+        let fishes = [
           { name: 'корюшка', weight: 220, price: 50},
           { name: 'окунь', weight:  200, price: 65},
           { name: 'плотва', weight: 185, price: 100},
@@ -144,8 +147,22 @@ async function clickForFish() {
           { name: 'лосось', weight: 100, price: 500},
           { name: 'акула', weight: 10, price: 1000},
           { name: 'кит', weight: 5, price: 2500},
-          { name: 'золотая рыбка', weight: 2, price: 5000}
+          { name: 'золотая рыбка', weight: 2, price: 4000}
         ];
+
+        if (rodLvl >= 5) {
+            fishes = [          
+          { name: 'много корюшки', weight: 210, price: 100},
+          { name: 'окунь', weight:  200, price: 75},
+          { name: 'плотва', weight: 185, price: 110},
+          { name: 'лещ', weight: 160, price: 160},
+          { name: 'осьминог', weight: 145, price: 210},
+          { name: 'щука', weight: 135, price: 260},
+          { name: 'лосось', weight: 105, price: 510},
+          { name: 'акула', weight: 11, price: 1100},
+          { name: 'кит', weight: 6, price: 2600},
+          { name: 'золотая рыбка', weight: 3, price: 4200}]
+        }
 
         const totalWeight = fishes.reduce((sum, fish) => sum + fish.weight, 0);
         let randomNum = Math.random() * totalWeight;
@@ -169,8 +186,10 @@ async function clickForFish() {
 
         if (chosenFish.name === 'плотва' && plotva) plotva.style.opacity = 1;
         if (chosenFish.name === 'корюшка' && corushka) corushka.style.opacity = 1;
+        if (chosenFish.name === 'много корюшки' && someCorushk) someCorushk.style.opacity = 1;
         if (chosenFish.name === 'окунь' && okun) okun.style.opacity = 1;
         if (chosenFish.name === 'лещ' && lesh) lesh.style.opacity = 1;
+        if (chosenFish.name === 'осьминог' && osminog) osminog.style.opacity = 1;
         if (chosenFish.name === 'щука' && shuka) shuka.style.opacity = 1;
         if (chosenFish.name === 'лосось' && losoc) losoc.style.opacity = 1;
         if (chosenFish.name === 'акула' && shark) shark.style.opacity = 1;
@@ -181,6 +200,8 @@ async function clickForFish() {
 
         if (plotva) plotva.style.opacity = 0;
         if (corushka) corushka.style.opacity = 0;
+        if (someCorushk) someCorushk.style.opacity = 0;
+        if (osminog) osminog.style.opacity = 0;
         if (okun) okun.style.opacity = 0;
         if (lesh) lesh.style.opacity = 0;
         if (shuka) shuka.style.opacity = 0;
